@@ -6,10 +6,10 @@ public class Location {
     private double lon;
 
     public Location(String name, double lat, double lon) {
-        if (lat<-90 || lat>90){
+        if (lat < -90 || lat > 90) {
             throw new IllegalArgumentException("Lat must be between [-90;90]");
         }
-        if (lon<-180 || lon>180){
+        if (lon < -180 || lon > 180) {
             throw new IllegalArgumentException("Lon must be between [-180;180]");
         }
         this.name = name;
@@ -58,5 +58,10 @@ public class Location {
         distance = Math.pow(distance, 2);// + Math.pow(height, 2);
 
         return Math.sqrt(distance);
+    }
+
+    public static Location parseLocation(String str) {
+        String[] data = str.split(",");
+        return new Location(data[0], Double.parseDouble(data[1]), Double.parseDouble(data[2]));
     }
 }
