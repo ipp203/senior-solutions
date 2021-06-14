@@ -6,6 +6,12 @@ public class Location {
     private double lon;
 
     public Location(String name, double lat, double lon) {
+        if (lat<-90 || lat>90){
+            throw new IllegalArgumentException("Lat must be between [-90;90]");
+        }
+        if (lon<-180 || lon>180){
+            throw new IllegalArgumentException("Lon must be between [-180;180]");
+        }
         this.name = name;
         this.lat = lat;
         this.lon = lon;
