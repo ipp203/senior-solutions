@@ -1,10 +1,16 @@
 package location;
 
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class LocationTest {
     private LocationParser locationParser;
@@ -77,45 +83,30 @@ class LocationTest {
         assertThrows(IllegalArgumentException.class, () -> new Location("Dummy", -1.0, 200.0));
     }
 
-    class RepeatedTestClass {
-        private final Location location;
-        private final boolean bool;
 
-        public RepeatedTestClass(Location location, boolean bool) {
-            this.location = location;
-            this.bool = bool;
-        }
-
-        public Location getLocation() {
-            return location;
-        }
-
-        public boolean isBool() {
-            return bool;
-        }
+    private static Stream<Arguments> createLocations() {
+        return Stream.of(
+                arguments(new Location("Budapest", 47.497912, 19.040235), false),
+                arguments(new Location("Greenwich", 51.46, 0), false),
+                arguments(new Location("Quitu", 0, 78.5), true));
     }
 
-    private final List<RepeatedTestClass> locationsOnEquator = List.of(
-            new RepeatedTestClass(new Location("Budapest", 47.497912, 19.040235), false),
-            new RepeatedTestClass(new Location("Greenwich", 51.46, 0), false),
-            new RepeatedTestClass(new Location("Quitu", 0, 78.5), true));
-
-    @RepeatedTest(3)
-    void testRepeatedIsOnEquator(RepetitionInfo repetitionInfo) {
-        int i = repetitionInfo.getCurrentRepetition() - 1;
-        assertEquals(locationsOnEquator.get(i).isBool(),
-                locationParser.isOnEquator(locationsOnEquator.get(i).getLocation()));
+    @ParameterizedTest
+    @MethodSource("createLocations")
+    void testRepeatedIsOnEquator(Location location,boolean result) {
+        assertEquals(result,
+                locationParser.isOnEquator(location));
     }
 
-    private final List<RepeatedTestClass> locationsOnPrimeMeridian = List.of(
-            new RepeatedTestClass(new Location("Budapest", 47.497912, 19.040235), false),
-            new RepeatedTestClass(new Location("Greenwich", 51.46, 0), true),
-            new RepeatedTestClass(new Location("Quitu", 0, 78.5), false));
+    private Object[][] locationsOnPrimeMeridian = new Object[][]{
+            {new Location("Budapest", 47.497912, 19.040235), false},
+            {new Location("Greenwich", 51.46, 0), true},
+            {new Location("Quitu", 0, 78.5), false}};
 
     @RepeatedTest(value = 3, name = "testIsOnPrimeMeridian{currentRepetition}/{totalRepetitions}")
     void testRepeatedIsOnPrimeMeridian(RepetitionInfo repetitionInfo) {
         int i = repetitionInfo.getCurrentRepetition() - 1;
-        assertEquals(locationsOnPrimeMeridian.get(i).isBool(),
-                locationParser.isOnPrimeMeridian(locationsOnPrimeMeridian.get(i).getLocation()));
+        assertEquals(locationsOnPrimeMeridian[i][1],
+                locationParser.isOnPrimeMeridian((Location)locationsOnPrimeMeridian[i][0]));
     }
 }
