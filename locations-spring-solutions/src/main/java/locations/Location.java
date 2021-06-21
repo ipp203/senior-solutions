@@ -1,10 +1,10 @@
 package locations;
 
 public class Location {
-    private long id;
-    private String name;
-    private double lat;
-    private double lon;
+    private final long id;
+    private final String name;
+    private final double lat;
+    private final double lon;
 
     public Location(long id, String name, double lat, double lon) {
         this.id = id;
