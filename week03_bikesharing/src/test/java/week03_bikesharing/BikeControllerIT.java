@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 
 @SpringBootTest
@@ -18,8 +19,9 @@ public class BikeControllerIT {
 
 
         assertThat(controller.getBikeRentalList())
-                .hasSize(5);
-                //.contains(list.get(0));
+                .hasSize(5)
+                .extracting("bikeId","distance")
+                .contains(tuple("FH675",0.8));
 
 
     }
@@ -28,8 +30,8 @@ public class BikeControllerIT {
     void getUsers() {
 
         assertThat(controller.getUsers())
-                .hasSize(5);
-                //.contains(users.get(0));
+                .hasSize(5)
+                .contains("US3434");
 
 
     }

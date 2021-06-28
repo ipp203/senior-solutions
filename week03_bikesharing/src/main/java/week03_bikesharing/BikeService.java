@@ -16,7 +16,8 @@ import java.util.stream.Stream;
 
 @Service
 public class BikeService {
-    private static final String filename = "bikes.csv";
+    //private static final String filename = "f:/Training360/prg_halado/senior-solutions/week03_bikesharing/bikes.csv";
+    private String filename = "bikes.csv";
 
     private List<BikeRental> rentalList;
 
