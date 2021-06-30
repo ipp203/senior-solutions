@@ -3,7 +3,6 @@ package locations;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
-import org.modelmapper.internal.bytebuddy.description.method.MethodDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +48,7 @@ public class LocationsService {
     }
 
     public LocationDto getLocationById(long id) {
-        Location result = locations.stream()
-                .filter(l -> l.getId()==id)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Location not found, id: " + id));
+        Location result = getLocation(id);
 
         return modelMapper.map(result, LocationDto.class);
     }
@@ -63,11 +59,8 @@ public class LocationsService {
         return modelMapper.map(location,LocationDto.class);
     }
 
-    public LocationDto updateLocation(long id, LocationUpdateCommand command) {
-        Location result = locations.stream()
-                .filter(l -> l.getId()==id)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Location not found, id: " + id));
+    public LocationDto updateLocation(long id, UpdateLocationCommand command) {
+        Location result = getLocation(id);
 
         result.setName(command.getName());
         result.setLat(command.getLat());
@@ -75,5 +68,23 @@ public class LocationsService {
 
         return modelMapper.map(result,LocationDto.class);
     }
+
+    public void deleteLocation(long id) {
+        Location location = getLocation(id);
+
+        locations.remove(location);
+    }
+
+
+////////////////////////
+
+    private Location getLocation(long id){
+        return locations.stream()
+                .filter(l -> l.getId()==id)
+                .findFirst()
+                .orElseThrow(() -> new LocationNotFoundException("Location not found, id: " + id));
+    }
+
+
 }
 

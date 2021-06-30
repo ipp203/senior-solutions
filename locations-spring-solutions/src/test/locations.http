@@ -20,6 +20,10 @@ Content-Type: application/json
 }
 
 ###
+DELETE http://localhost:8080/locations/4
+Content-Type: application/json
+
+###
 GET http://localhost:8080/locations
 Accept: application/json
 

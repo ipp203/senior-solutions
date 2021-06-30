@@ -5,10 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class LocationDto {
-    private long id;
+@AllArgsConstructor
+public class UpdateLocationCommand {
     private String name;
     private double lat;
     private double lon;

@@ -1,11 +1,15 @@
 package locations;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class LocationsController {
@@ -32,13 +36,35 @@ public class LocationsController {
     }
 
     @PostMapping("/locations")
+    @ResponseStatus(HttpStatus.CREATED)
     public LocationDto createLocation(@RequestBody CreateLocationCommand command){
         return service.createLocation(command);
     }
 
     @PutMapping("/locations/{id}")
-    public LocationDto updateLocation(@PathVariable("id") long id,@RequestBody LocationUpdateCommand command){
+    public LocationDto updateLocation(@PathVariable("id") long id,@RequestBody UpdateLocationCommand command){
         return service.updateLocation(id,command);
+    }
+
+    @DeleteMapping("/locations/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLocation(@PathVariable("id") long id){
+        service.deleteLocation(id);
+    }
+
+    @ExceptionHandler(LocationNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Problem> locationNotFound(LocationNotFoundException exception){
+        Problem problem = Problem.builder()
+                .withType(URI.create("locations/location-not-found"))
+                .withTitle("Not found")
+                .withStatus(Status.NOT_FOUND)
+                .withDetail(exception.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+                .body(problem);
     }
 
 }
