@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class Movie {
@@ -21,10 +22,6 @@ public class Movie {
 
     public void addRate(int rate) {
         rates.add(rate);
-        rateAverage = 0;
-        for (double r : rates) {
-            rateAverage += r;
-        }
-        rateAverage /= rates.size();
+        rateAverage = rates.stream().collect(Collectors.summarizingInt(Integer::intValue)).getAverage();
     }
 }

@@ -1,12 +1,13 @@
 package movies;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/movies")
+@RequestMapping("api/movies")
 public class MovieController {
     private MovieService service;
 
@@ -38,4 +39,8 @@ public class MovieController {
     public void deleteMovie(@PathVariable("id") long id){
         service.deleteMovieById(id);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public void handleNotFound(){}
 }

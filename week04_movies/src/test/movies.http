@@ -3,7 +3,7 @@ Accept: application/json
 
 ###
 
-GET http://localhost:8080/api/movies/1
+GET http://localhost:8080/api/movies/4
 Accept: application/json
 
 ###
