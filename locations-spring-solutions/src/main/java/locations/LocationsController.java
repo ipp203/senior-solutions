@@ -3,13 +3,16 @@ package locations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class LocationsController {
@@ -37,12 +40,12 @@ public class LocationsController {
 
     @PostMapping("/locations")
     @ResponseStatus(HttpStatus.CREATED)
-    public LocationDto createLocation(@RequestBody CreateLocationCommand command){
+    public LocationDto createLocation(@Valid @RequestBody CreateLocationCommand command){
         return service.createLocation(command);
     }
 
     @PutMapping("/locations/{id}")
-    public LocationDto updateLocation(@PathVariable("id") long id,@RequestBody UpdateLocationCommand command){
+    public LocationDto updateLocation(@PathVariable("id") long id,@Valid @RequestBody UpdateLocationCommand command){
         return service.updateLocation(id,command);
     }
 
@@ -63,6 +66,25 @@ public class LocationsController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+                .body(problem);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Problem> handleValidationError(MethodArgumentNotValidException e){
+        List<Violation> violations = e.getBindingResult().getFieldErrors().stream()
+                .map(fe->new Violation(fe.getField(),fe.getDefaultMessage()))
+                .collect(Collectors.toList());
+
+        Problem problem = Problem.builder()
+                .withType(URI.create("Location/not-valid"))
+                .withTitle("Validation error")
+                .withStatus(Status.BAD_REQUEST)
+                .withDetail(e.getMessage())
+                .with("Violations",violations)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
                 .body(problem);
     }

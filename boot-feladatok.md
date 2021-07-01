@@ -24,7 +24,7 @@ Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 * [ ] Tesztelés Rest Assured használatával
 * [ ] Rest Assured séma validáció
 * [ ] Content Negotiation
-* [ ] Validáció
+* [x] Validáció
 * [ ] Spring Boot konfiguráció
 * [ ] Spring Boot naplózás
 * [ ] Spring JdbcTemplate

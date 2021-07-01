@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,13 +40,13 @@ class LocationsControllerTest {
         Type targetListType = new TypeToken<List<Location>>(){}.getType();
         List<LocationDto> result = modelMapper.map(list,targetListType);
 
-        when(service.getLocations()).thenReturn(result);
+        when(service.getLocationByNameFragment(any())).thenReturn(result);
         List<LocationDto> locations = controller.getLocationByName(Optional.empty());
         assertThat(locations)
                 .hasSize(2)
                 .extracting("name")
                 .contains("Eger", "Pecs");
-        verify(service).getLocations();
+        verify(service).getLocationByNameFragment(any());
     }
 
     @Test

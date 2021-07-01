@@ -1,6 +1,8 @@
 package locations;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -9,7 +11,7 @@ class LocationsServiceTest {
 
     @Test
     void getLocationsTest() {
-        LocationsService service = new LocationsService();
+        LocationsService service = new LocationsService(new ModelMapper());
         assertThat(service.getLocations())
                 .extracting("name","lat","lon")
                 .isNotNull()

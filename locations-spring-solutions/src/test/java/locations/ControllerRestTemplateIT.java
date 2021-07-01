@@ -11,11 +11,13 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -50,6 +52,30 @@ public class ControllerRestTemplateIT {
 
         assertThat(result)
                 .extracting("name")
-                .containsAll(List.of("Debrecen","Budapest"));
+                .containsAll(List.of("Debrecen", "Budapest"));
     }
+
+    @Test
+    @Order(3)
+    void testCreateValidationWithWrongLatitiude() {
+         Problem problem= template.postForObject(
+                "/locations",
+                new CreateLocationCommand("Proba", -100.0, 50.0),
+                Problem.class);
+
+         assertEquals(Status.BAD_REQUEST,problem.getStatus());
+         assertTrue(problem.getDetail().contains("Latitude must be between -90 and 90!"));
+    }
+
+    @Test
+    @Order(4)
+    void testUpdateValidationWithWrongName() {
+        Problem problem= template.postForObject(
+                "/locations",
+                new UpdateLocationCommand("  ", -10.0, 50.0),
+                Problem.class);
+
+        assertEquals(Status.BAD_REQUEST,problem.getStatus());
+    }
+
 }
