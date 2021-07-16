@@ -1,0 +1,21 @@
+GET http://localhost:8080/fleamarket/advertisement
+Accept: application/json
+
+###
+POST http://localhost:8080/fleamarket/advertisement
+Content-Type: application/json
+Accept: application/json
+
+{
+  "lumberCategory": "FESTMÉNY",
+  "text": "proba"
+}
+
+###
+PUT http://localhost:8080/fleamarket/advertisement/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "text": "modosit"
+}
