@@ -12,7 +12,8 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Activity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "act_id_gen")
+    @TableGenerator(name = "act_id_gen", pkColumnName = "id_gen", valueColumnName = "id_val", allocationSize = 5, initialValue = 1000)
     private Long id;
 
     @Column(name = "start_time", nullable = false)
