@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -26,5 +27,18 @@ public class Activity {
         this.startTime = startTime;
         this.description = description;
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Activity activity = (Activity) o;
+        return Objects.equals(id, activity.id) && Objects.equals(description, activity.description) && type == activity.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, type);
     }
 }
