@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -66,5 +67,22 @@ class ActivityDAOIT {
         List<Activity> activities = activityDAO.listActivities();
 
         assertEquals(3, activities.size());
+    }
+
+    @Test
+    void updateActivity() {
+        ActivityDAO activityDAO = new ActivityDAO(factory);
+        activityDAO.saveActivity(activity1);
+        activityDAO.updateActivity(activity1.getId(), "***"+activity1.getDescription());
+
+        Activity updatedActivity = activityDAO.findActivityById(activity1.getId());
+
+        assertEquals("***"+activity1.getDescription(),updatedActivity.getDescription());
+
+        assertTrue(updatedActivity.getCreatedAt().isBefore(updatedActivity.getUpdatedAt()));
+
+        Duration duration = Duration.between(updatedActivity.getCreatedAt(),updatedActivity.getUpdatedAt());
+        assertTrue(duration.toMillis()<120);
+        System.out.println(duration.toMillis());
     }
 }

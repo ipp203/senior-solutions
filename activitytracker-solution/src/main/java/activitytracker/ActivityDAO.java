@@ -5,7 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class ActivityDAO {
-    private EntityManagerFactory factory;
+    private final EntityManagerFactory factory;
 
     public ActivityDAO(EntityManagerFactory factory) {
         this.factory = factory;
@@ -31,5 +31,16 @@ public class ActivityDAO {
         List<Activity> activities = em.createQuery("select a from Activity a", Activity.class).getResultList();
         em.close();
         return activities;
+    }
+
+    public void updateActivity(long id, String description){
+        EntityManager em = factory.createEntityManager();
+        em.getTransaction().begin();
+
+        Activity activity = em.find(Activity.class,id);
+        activity.setDescription(description);
+
+        em.getTransaction().commit();
+        em.close();
     }
 }

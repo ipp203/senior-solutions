@@ -26,10 +26,25 @@ public class Activity {
     @Column(nullable = false, length = 20)
     private Type type;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     public Activity(LocalDateTime startTime, String description, Type type) {
         this.startTime = startTime;
         this.description = description;
         this.type = type;
+    }
+
+
+    @PrePersist
+    public void savePersistTime() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void saveUpdateTime(){
+        updatedAt = LocalDateTime.now();
     }
 
     @Override

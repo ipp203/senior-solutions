@@ -6,7 +6,7 @@ import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 
 public class ActivityTrackerMain {
-    private EntityManagerFactory factory = Persistence.createEntityManagerFactory("pu");
+    private final EntityManagerFactory factory = Persistence.createEntityManagerFactory("pu");
 
     private void insertActivity(Activity... activities) {
         EntityManager em = factory.createEntityManager();
