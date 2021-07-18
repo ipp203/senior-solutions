@@ -73,16 +73,31 @@ class ActivityDAOIT {
     void updateActivity() {
         ActivityDAO activityDAO = new ActivityDAO(factory);
         activityDAO.saveActivity(activity1);
-        activityDAO.updateActivity(activity1.getId(), "***"+activity1.getDescription());
+        activityDAO.updateActivity(activity1.getId(), "***" + activity1.getDescription());
 
         Activity updatedActivity = activityDAO.findActivityById(activity1.getId());
 
-        assertEquals("***"+activity1.getDescription(),updatedActivity.getDescription());
+        assertEquals("***" + activity1.getDescription(), updatedActivity.getDescription());
 
         assertTrue(updatedActivity.getCreatedAt().isBefore(updatedActivity.getUpdatedAt()));
 
-        Duration duration = Duration.between(updatedActivity.getCreatedAt(),updatedActivity.getUpdatedAt());
-        assertTrue(duration.toMillis()<120);
+        Duration duration = Duration.between(updatedActivity.getCreatedAt(), updatedActivity.getUpdatedAt());
+        assertTrue(duration.toMillis() < 120);
         System.out.println(duration.toMillis());
+    }
+
+    @Test
+    void findActivityByIdWithLabels() {
+
+        ActivityDAO activityDAO = new ActivityDAO(factory);
+        activity1.setLabels(List.of("bbbb", "aaaa", "cccc"));
+
+        activityDAO.saveActivity(activity1);
+
+        Activity activity = activityDAO.findActivityByIdWithLabels(activity1.getId());
+
+        assertEquals(3, activity.getLabels().size());
+        assertEquals("aaaa", activity.getLabels().get(0));
+
     }
 }

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +31,12 @@ public class Activity {
 
     private LocalDateTime updatedAt;
 
+    @ElementCollection
+    @CollectionTable(name = "activity_labels", joinColumns = @JoinColumn(name = "act_id"))
+    @Column(name = "label")
+    @OrderBy
+    private List<String> labels;
+
     public Activity(LocalDateTime startTime, String description, Type type) {
         this.startTime = startTime;
         this.description = description;
@@ -43,7 +50,7 @@ public class Activity {
     }
 
     @PreUpdate
-    public void saveUpdateTime(){
+    public void saveUpdateTime() {
         updatedAt = LocalDateTime.now();
     }
 
