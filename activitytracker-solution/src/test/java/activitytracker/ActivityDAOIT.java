@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -100,4 +101,20 @@ class ActivityDAOIT {
         assertEquals("aaaa", activity.getLabels().get(0));
 
     }
+
+    @Test
+    void findActivityByIdWithTrackPoints() {
+        ActivityDAO activityDAO = new ActivityDAO(factory);
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021,6,11),43.001,43.1));
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021,6,10),43.002,43.11));
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021,6,12),43.005,43.11));
+
+        activityDAO.saveActivity(activity1);
+
+        Activity activity = activityDAO.findActivityByIdWithTrackPoints(activity1.getId());
+
+        assertEquals(3,activity.getTrackPoints().size());
+        assertEquals(LocalDate.of(2021,6,10),activity.getTrackPoints().get(0).getTime());
+    }
+
 }

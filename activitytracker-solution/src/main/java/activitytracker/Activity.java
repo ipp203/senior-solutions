@@ -2,9 +2,11 @@ package activitytracker;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,12 +39,23 @@ public class Activity {
     @OrderBy
     private List<String> labels;
 
+    @OneToMany(mappedBy = "activity", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OrderBy(value = "time")
+    private List<TrackPoint> trackPoints;
+
     public Activity(LocalDateTime startTime, String description, Type type) {
         this.startTime = startTime;
         this.description = description;
         this.type = type;
     }
 
+    public void addTrackPoint(TrackPoint trackPoint){
+        trackPoint.setActivity(this);
+        if(trackPoints == null){
+            trackPoints = new ArrayList<>();
+        }
+        trackPoints.add(trackPoint);
+    }
 
     @PrePersist
     public void savePersistTime() {
