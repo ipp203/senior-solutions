@@ -105,16 +105,69 @@ class ActivityDAOIT {
     @Test
     void findActivityByIdWithTrackPoints() {
         ActivityDAO activityDAO = new ActivityDAO(factory);
-        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021,6,11),43.001,43.1));
-        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021,6,10),43.002,43.11));
-        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021,6,12),43.005,43.11));
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 11), 43.001, 43.1));
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 10), 43.002, 43.11));
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 12), 43.005, 43.11));
 
         activityDAO.saveActivity(activity1);
 
         Activity activity = activityDAO.findActivityByIdWithTrackPoints(activity1.getId());
 
-        assertEquals(3,activity.getTrackPoints().size());
-        assertEquals(LocalDate.of(2021,6,10),activity.getTrackPoints().get(0).getTime());
+        assertEquals(3, activity.getTrackPoints().size());
+        assertEquals(LocalDate.of(2021, 6, 10), activity.getTrackPoints().get(0).getTime());
     }
 
+    @Test
+    void findActivityByIdWithArea() {
+        ActivityDAO activityDAO = new ActivityDAO(factory);
+        AreaDao areaDao = new AreaDao(factory);
+
+        Area area1 = new Area("Badacsony");
+        Area area2 = new Area("Gulacs");
+        Area area3 = new Area("Somlo");
+
+        areaDao.saveArea(area1);
+        areaDao.saveArea(area2);
+        areaDao.saveArea(area3);
+
+        activity1.addArea(area2);
+        activity1.addArea(area1);
+
+        activity2.addArea(area1);
+        activity2.addArea(area3);
+
+        activityDAO.saveActivity(activity1);
+        activityDAO.saveActivity(activity2);
+
+        Activity activity1FromDB = activityDAO.findActivityByIdWithAreas(activity1.getId());
+
+        assertEquals(2, activity1FromDB.getAreas().size());
+        assertEquals("Badacsony", activity1FromDB.getAreas().get(0).getName());
+
+    }
+
+    @Test
+    void findTrackPointCoordinatesByDate() {
+        ActivityDAO activityDAO = new ActivityDAO(factory);
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 11), 43.001, 43.1));
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 10), 43.002, 43.11));
+
+        activity2.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 11), 43.001, 43.1));
+        activity2.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 10), 43.002, 43.11));
+        activity2.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 12), 43.005, 43.11));
+
+        activity3.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 11), 43.001, 43.1));
+
+        activityDAO.saveActivity(activity1);
+        activityDAO.saveActivity(activity2);
+        activityDAO.saveActivity(activity3);
+
+        List<Coordinate> coordinates =
+                activityDAO.findTrackPointCoordinatesByDate(
+                        LocalDateTime.of(2021, 6, 11, 12, 0), 0, 10);
+
+        assertEquals(4, coordinates.size());
+
+
+    }
 }

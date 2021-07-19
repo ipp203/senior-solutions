@@ -2,7 +2,6 @@ package activitytracker;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,6 +12,8 @@ import java.util.Objects;
 @Entity
 @Data
 @NoArgsConstructor
+@NamedQuery(name = "findTrackPointCoordinatesByDate",
+        query = "select new activitytracker.Coordinate(t.lat,t.lon) from Activity a join a.trackPoints t where a.startTime > :time")
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "act_id_gen")
@@ -39,9 +40,13 @@ public class Activity {
     @OrderBy
     private List<String> labels;
 
-    @OneToMany(mappedBy = "activity", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToMany(mappedBy = "activity", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @OrderBy(value = "time")
     private List<TrackPoint> trackPoints;
+
+    @ManyToMany
+    @OrderBy("name")
+    private List<Area> areas;
 
     public Activity(LocalDateTime startTime, String description, Type type) {
         this.startTime = startTime;
@@ -49,12 +54,20 @@ public class Activity {
         this.type = type;
     }
 
-    public void addTrackPoint(TrackPoint trackPoint){
+    public void addTrackPoint(TrackPoint trackPoint) {
         trackPoint.setActivity(this);
-        if(trackPoints == null){
+        if (trackPoints == null) {
             trackPoints = new ArrayList<>();
         }
         trackPoints.add(trackPoint);
+    }
+
+    public void addArea(Area area) {
+        area.addActivity(this);
+        if (areas == null) {
+            areas = new ArrayList<>();
+        }
+        areas.add(area);
     }
 
     @PrePersist

@@ -1,8 +1,12 @@
 package activitytracker;
 
+
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.time.LocalDateTime;
 import java.util.List;
+
 
 public class ActivityDAO {
     private final EntityManagerFactory factory;
@@ -58,11 +62,32 @@ public class ActivityDAO {
     public Activity findActivityByIdWithTrackPoints(long id) {
         EntityManager em = factory.createEntityManager();
         Activity activity = em
-                .createQuery("select a from Activity a join fetch a.trackPoints where a.id= :id",Activity.class)
-                .setParameter("id",id)
+                .createQuery("select a from Activity a join fetch a.trackPoints where a.id= :id", Activity.class)
+                .setParameter("id", id)
                 .getSingleResult();
         em.close();
         return activity;
     }
 
+    public Activity findActivityByIdWithAreas(long id) {
+        EntityManager em = factory.createEntityManager();
+        Activity activity = em
+                .createQuery("select a from Activity a join fetch a.areas where a.id= :id", Activity.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        em.close();
+        return activity;
+    }
+
+    public List<Coordinate> findTrackPointCoordinatesByDate(LocalDateTime afterThis, int start, int max) {
+        EntityManager em = factory.createEntityManager();
+        List<Coordinate> result = em
+                .createNamedQuery("findTrackPointCoordinatesByDate", Coordinate.class)
+                .setParameter("time", afterThis)
+                .setFirstResult(start)
+                .setMaxResults(max)
+                .getResultList();
+        em.close();
+        return result;
+    }
 }
