@@ -1,7 +1,6 @@
 package activitytracker;
 
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
@@ -89,5 +88,15 @@ public class ActivityDAO {
                 .getResultList();
         em.close();
         return result;
+    }
+
+    public List<Object[]> findTrackPointCountByActivity() {
+        EntityManager em = factory.createEntityManager();
+        List<Object[]> result = em
+                .createQuery("select a.description, count(t) from Activity a join a.trackPoints t group by a order by a.description", Object[].class)
+                .getResultList();
+        em.close();
+        return result;
+
     }
 }

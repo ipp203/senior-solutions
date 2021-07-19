@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -168,6 +169,34 @@ class ActivityDAOIT {
 
         assertEquals(4, coordinates.size());
 
+
+    }
+
+    @Test
+    void findTrackPointCountByActivity() {
+        ActivityDAO activityDAO = new ActivityDAO(factory);
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 11), 43.001, 43.1));
+        activity1.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 10), 43.002, 43.11));
+
+        activity2.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 11), 43.001, 43.1));
+        activity2.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 10), 43.002, 43.11));
+        activity2.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 12), 43.005, 43.11));
+
+        activity3.addTrackPoint(new TrackPoint(LocalDate.of(2021, 6, 11), 43.001, 43.1));
+
+        activityDAO.saveActivity(activity1);
+        activityDAO.saveActivity(activity2);
+        activityDAO.saveActivity(activity3);
+
+        List<Object[]> result = activityDAO.findTrackPointCountByActivity();
+//        for (Object[] o:result ) {
+//            System.out.println((String)o[0] + (long)o[1]);
+//        }
+
+        assertEquals(3, result.size());
+        assertEquals(3L, (long) result.get(0)[1]);
+        assertEquals(2L, (long) result.get(1)[1]);
+        assertEquals(1L, (long) result.get(2)[1]);
 
     }
 }
