@@ -28,8 +28,8 @@ Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 * [x] Spring Boot konfiguráció
 * [x] Spring Boot naplózás
 * [ ] Spring JdbcTemplate
-* [ ] Spring Data JPA
-* [ ] MariaDB
+* [x] Spring Data JPA
+* [x] MariaDB
 * [ ] Integrációs tesztelés
 * [ ] Alkalmazás futtatása Dockerben MariaDB-vel
 * [ ] Séma inicializálás Flyway-jel
