@@ -11,7 +11,7 @@
 	<groupId>com.Training360</groupId>
 	<artifactId>week03_usedcars</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>usedcars</name>
+	<name>week03_usedcars</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>16</java.version>
