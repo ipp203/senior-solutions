@@ -26,7 +26,7 @@ Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 * [ ] Content Negotiation
 * [x] Validáció
 * [x] Spring Boot konfiguráció
-* [ ] Spring Boot naplózás
+* [x] Spring Boot naplózás
 * [ ] Spring JdbcTemplate
 * [ ] Spring Data JPA
 * [ ] MariaDB

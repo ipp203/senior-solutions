@@ -3,6 +3,8 @@ package locations;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class LocationsService {
             new Location(id.incrementAndGet(), "Debrecen", 43.0, 44.0)
     )));
 
+    private static final Logger log = LoggerFactory.getLogger(LocationsService.class);
 
     private ModelMapper modelMapper;
 
@@ -63,6 +66,10 @@ public class LocationsService {
 
         Location location = new Location(id.incrementAndGet(), changeToUpperCaseBasedOnProperty(command.getName()), command.getLat(), command.getLon());
         locations.add(location);
+
+        log.info("Location created");
+        log.debug("Location created with id: {}",location.getId());
+
         return modelMapper.map(location, LocationDto.class);
     }
 
@@ -72,6 +79,9 @@ public class LocationsService {
         result.setName(changeToUpperCaseBasedOnProperty(command.getName()));
         result.setLat(command.getLat());
         result.setLon(command.getLon());
+
+        log.info("Location updated");
+        log.debug("Location updated, id: {}",result.getId());
 
         return modelMapper.map(result, LocationDto.class);
     }
