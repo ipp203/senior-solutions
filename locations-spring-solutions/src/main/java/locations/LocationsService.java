@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -22,27 +23,32 @@ public class LocationsService {
 
     private ModelMapper modelMapper;
 
+    private Environment environment;
+
     public LocationsService() {
     }
 
     @Autowired
-    public LocationsService(ModelMapper modelMapper) {
+    public LocationsService(ModelMapper modelMapper, Environment environment) {
         this.modelMapper = modelMapper;
+        this.environment = environment;
     }
 
     public List<LocationDto> getLocations() {
-        Type targetListType = new TypeToken<List<LocationDto>>() {}.getType();
+        Type targetListType = new TypeToken<List<LocationDto>>() {
+        }.getType();
         return modelMapper.map(locations, targetListType);
     }
 
     public List<LocationDto> getLocationByNameFragment(Optional<String> nameFragment) {
-        if(nameFragment.isEmpty()){
+        if (nameFragment.isEmpty()) {
             return getLocations();
-        }else {
+        } else {
             List<Location> result = locations.stream()
                     .filter(l -> l.getName().toLowerCase().contains(nameFragment.get().toLowerCase(Locale.ROOT)))
                     .collect(Collectors.toList());
-            Type targetListType = new TypeToken<List<LocationDto>>(){}.getType();
+            Type targetListType = new TypeToken<List<LocationDto>>() {
+            }.getType();
             return modelMapper.map(result, targetListType);
         }
     }
@@ -54,19 +60,20 @@ public class LocationsService {
     }
 
     public LocationDto createLocation(CreateLocationCommand command) {
-        Location location = new Location(id.incrementAndGet(), command.getName(), command.getLat(),command.getLon());
+
+        Location location = new Location(id.incrementAndGet(), changeToUpperCaseBasedOnProperty(command.getName()), command.getLat(), command.getLon());
         locations.add(location);
-        return modelMapper.map(location,LocationDto.class);
+        return modelMapper.map(location, LocationDto.class);
     }
 
     public LocationDto updateLocation(long id, UpdateLocationCommand command) {
         Location result = getLocation(id);
 
-        result.setName(command.getName());
+        result.setName(changeToUpperCaseBasedOnProperty(command.getName()));
         result.setLat(command.getLat());
         result.setLon(command.getLon());
 
-        return modelMapper.map(result,LocationDto.class);
+        return modelMapper.map(result, LocationDto.class);
     }
 
     public void deleteLocation(long id) {
@@ -78,11 +85,16 @@ public class LocationsService {
 
 ////////////////////////
 
-    private Location getLocation(long id){
+    private Location getLocation(long id) {
         return locations.stream()
-                .filter(l -> l.getId()==id)
+                .filter(l -> l.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new LocationNotFoundException("Location not found, id: " + id));
+    }
+
+    private String changeToUpperCaseBasedOnProperty(String name) {
+        boolean uppercase = environment.getProperty("locations.touppercase").equals("true");
+        return uppercase ? name.toUpperCase() : name;
     }
 
 
