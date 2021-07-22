@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@NamedQuery(name = "findTrackPointCoordinatesByDate",
+        query = "select new activitytracker.Coordinate(t.lat,t.lon) from TrackPoint t where t.activity.startTime > :time")
 public class TrackPoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
