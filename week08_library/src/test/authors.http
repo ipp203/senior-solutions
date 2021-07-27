@@ -1,0 +1,30 @@
+GET http://localhost:8080/api/authors
+Accept: application/json
+
+###
+POST http://localhost:8080/api/authors
+Content-Type: application/json
+
+{
+  "name": "Verne Gyula"
+}
+
+###
+POST http://localhost:8080/api/authors
+Content-Type: application/json
+
+{
+  "name": "Tolsztoj"
+}
+
+###
+POST http://localhost:8080/api/authors/1/books
+Content-Type: application/json
+
+{
+  "title": "Nemo kapitanya",
+  "isbn": "1234567890122"
+}
+
+###
+DELETE http://localhost:8080/api/authors/1
