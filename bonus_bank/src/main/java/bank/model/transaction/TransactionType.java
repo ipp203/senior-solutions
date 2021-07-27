@@ -1,4 +1,4 @@
-package bank.transaction;
+package bank.model.transaction;
 
 public enum TransactionType {
     PAYMENT, //kifizetes

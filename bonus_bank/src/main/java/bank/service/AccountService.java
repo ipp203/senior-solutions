@@ -1,5 +1,10 @@
-package bank.account;
+package bank.service;
 
+import bank.repository.AccountRepository;
+import bank.model.account.Account;
+import bank.model.account.AccountDto;
+import bank.model.account.AccountWithTransactionsDto;
+import bank.model.account.CreateAccountCommand;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;

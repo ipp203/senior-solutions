@@ -1,4 +1,4 @@
-package bank.transaction;
+package bank.model.transaction;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;

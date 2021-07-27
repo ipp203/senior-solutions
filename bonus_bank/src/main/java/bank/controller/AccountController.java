@@ -1,5 +1,9 @@
-package bank.account;
+package bank.controller;
 
+import bank.model.account.AccountDto;
+import bank.model.account.AccountWithTransactionsDto;
+import bank.model.account.CreateAccountCommand;
+import bank.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

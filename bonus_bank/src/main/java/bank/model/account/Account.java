@@ -1,12 +1,13 @@
-package bank.account;
+package bank.model.account;
 
-import bank.transaction.LittleBalanceException;
-import bank.transaction.TransactionType;
+import bank.model.transaction.TransactionType;
+import bank.model.transaction.LittleBalanceException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,6 +20,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank
     private String name;
 
     @Column(unique = true, length = 8)

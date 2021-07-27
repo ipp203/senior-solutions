@@ -1,4 +1,4 @@
-package bank.transaction;
+package bank.model.transaction;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

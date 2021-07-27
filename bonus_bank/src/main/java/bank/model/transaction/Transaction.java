@@ -1,4 +1,4 @@
-package bank.transaction;
+package bank.model.transaction;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +24,7 @@ public class Transaction {
     private LocalDateTime time;
 
     private int balanceAfterTransaction;
+
 
     private String accountNumber;
 

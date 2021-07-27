@@ -1,5 +1,8 @@
-package bank.account;
+package bank.repository;
 
+import bank.model.account.AccountNotFoundException;
+import bank.model.account.Account;
+import bank.model.account.AccountStatus;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

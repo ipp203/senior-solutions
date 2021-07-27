@@ -1,5 +1,7 @@
-package bank.transaction;
+package bank.repository;
 
+import bank.model.transaction.Transaction;
+import bank.model.transaction.TransactionType;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

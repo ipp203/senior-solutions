@@ -1,7 +1,9 @@
-package bank.transaction;
+package bank.service;
 
-import bank.account.Account;
-import bank.account.AccountRepository;
+import bank.repository.AccountRepository;
+import bank.model.account.Account;
+import bank.model.transaction.*;
+import bank.repository.TransactionRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;

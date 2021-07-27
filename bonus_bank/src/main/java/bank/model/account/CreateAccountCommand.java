@@ -1,4 +1,4 @@
-package bank.transaction;
+package bank.model.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,10 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCashTransactionCommand {
-
-    private int amount;
-
-    private String accountNumber;
-
+public class CreateAccountCommand {
+    private String name;
 }
