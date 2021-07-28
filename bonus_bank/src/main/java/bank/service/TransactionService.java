@@ -28,8 +28,7 @@ public class TransactionService {
 
     public List<TransactionDto> getTransactions() {
         List<Transaction> transactions = transactionRepository.getTransactions();
-        Type targetListType = new TypeToken<List<TransactionDto>>() {
-        }.getType();
+        Type targetListType = new TypeToken<List<TransactionDto>>() {}.getType();
         return modelMapper.map(transactions, targetListType);
     }
 

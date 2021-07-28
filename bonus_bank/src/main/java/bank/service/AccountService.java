@@ -7,6 +7,7 @@ import bank.model.account.AccountWithTransactionsDto;
 import bank.model.account.CreateAccountCommand;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -20,12 +21,14 @@ import java.util.stream.IntStream;
 public class AccountService {
 
     private final AccountRepository repository;
-    private final ModelMapper modelMapper;
+    private ModelMapper modelMapper;
+
 
     public AccountService(AccountRepository repository, ModelMapper modelMapper) {
         this.repository = repository;
         this.modelMapper = modelMapper;
     }
+
 
     public AccountDto createAccount(CreateAccountCommand command) {
         Account account = new Account(command.getName(), generateAccountNumber(), 0, LocalDateTime.now());

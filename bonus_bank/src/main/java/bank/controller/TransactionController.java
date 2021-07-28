@@ -7,6 +7,7 @@ import bank.model.transaction.TransactionDto;
 import bank.service.TransactionService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,12 +32,12 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction/cash")
-    public TransactionDto createCashTransaction(@RequestBody CreateCashTransactionCommand command){
+    public TransactionDto createCashTransaction(@Valid @RequestBody CreateCashTransactionCommand command){
         return service.createCashTransaction(command);
     }
 
     @PostMapping("/transaction/transfer")
-    public TransactionDto createTransferTransaction(@RequestBody CreateTransferTransactionCommand command){
+    public TransactionDto createTransferTransaction(@Valid @RequestBody CreateTransferTransactionCommand command){
         return service.createTransferTransaction(command);
     }
 

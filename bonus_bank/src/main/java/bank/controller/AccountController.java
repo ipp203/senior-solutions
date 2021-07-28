@@ -6,6 +6,7 @@ import bank.model.account.CreateAccountCommand;
 import bank.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class AccountController {
     }
 
     @PostMapping("/account")
-    public AccountDto createAccount(@RequestBody CreateAccountCommand command) {
+    public AccountDto createAccount(@Valid @RequestBody CreateAccountCommand command) {
         return service.createAccount(command);
     }
 
@@ -33,7 +34,7 @@ public class AccountController {
     }
 
     @PutMapping("/account/{id}")
-    public AccountDto updateAccount(@PathVariable("id") long id, @RequestBody CreateAccountCommand command) {
+    public AccountDto updateAccount(@PathVariable("id") long id, @Valid @RequestBody CreateAccountCommand command) {
         return service.updateAccount(id, command);
     }
 
